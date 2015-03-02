@@ -1,0 +1,51 @@
+<?php
+class Aws {
+    static public function getData() {
+        $userData = @file_get_contents("http://169.254.169.254/latest/user-data");
+        if($userData === false) {
+            $userData = '<none>';
+        }
+        $result = [
+            'meta-data' => self::getAwsData("http://169.254.169.254/latest/meta-data"),
+            'dynamic' => self::getAwsData("http://169.254.169.254/latest/dynamic"),
+            'user-data' => $userData,
+        ];
+        return $result;
+    }
+
+    static private function getAwsData($url)
+    {
+        $data = file_get_contents($url);
+
+        $result = [];
+        foreach(explode("\n",$data) as $name) {
+            $name = strstr($name,'=',true) == '' ? $name : strstr($name,'=',true) . '/';
+            if(strstr($name,'/')) {
+                $result[$name] = self::getAwsData("{$url}/{$name}");
+            } else if($name !== "") {
+                $result[$name] = file_get_contents("{$url}/{$name}") ;
+            }
+        }
+        return $result;
+    }
+}
+
+$data = Aws::getData();
+
+$tableParams = [
+    'tableId' => 'awsPanel',
+    'tableWidth' => '4',
+];
+?>
+
+<?php echo $this->zrayTable($tableParams); ?>
+
+<script type="text/javascript">
+(function() {
+    var storage = zray.getStorage("invalidStorage");
+    var data = <?=json_encode($data)?>;
+    delete data.dynamic;
+    storage.setData(data);
+    var tree = zray.createTreeTable(storage, jQuery('#<?php echo $tableParams['tableId']; ?>'));
+})();
+</script>
