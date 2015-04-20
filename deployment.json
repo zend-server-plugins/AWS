@@ -1,5 +1,6 @@
 {
-  "name" : "AWS",
+  "name" : "aws",
+  "display_name" : "AWS",
   "version" : "1.0.0",
   "type": ["zray"],
   "eula": "EULA.txt",
