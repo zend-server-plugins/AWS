@@ -4,5 +4,5 @@
   "version" : "1.0.0",
   "type": ["zray"],
   "eula": "EULA.txt",
-  "logo": "zray/logo.png"
+  "logo": "logo.png"
 }
