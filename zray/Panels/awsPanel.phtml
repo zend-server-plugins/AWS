@@ -47,7 +47,8 @@ $data = Aws::getData();
 ?>
 
 <?php if (is_null($data)) : ?>
-	<div style="padding: 10px;"><b>This plugin can be used only on AWS environment.</b></div>
+  <div style="padding: 10px;"><b>This plugin can be used only on AWS environment.</b></div>
+  <div style="padding: 10px;"><b>Notice:</b> using this plugin on non-AWS server can significantly reduce Z-Ray performance.</div>
 <?php else : ?>
 <?php
 $tableParams = [
