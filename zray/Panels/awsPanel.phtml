@@ -1,11 +1,15 @@
 <?php
 class Aws {
     static public function getData() {
-		if (! self::Visit('http://169.254.169.254/latest/user-data')) {
-			return null;
-		}
-		
-        $userData = @file_get_contents("http://169.254.169.254/latest/user-data");
+        $c = stream_context_create([
+            'http' => [
+                'timeout' => 1,
+            ]
+        ]);
+        if (@file_get_contents("http://169.254.169.254/latest/meta-data", false, $c) === false) {
+            return null;
+        }
+        $userData = @file_get_contents("http://169.254.169.254/latest/user-data", false, $c);
         if($userData === false) {
             $userData = '<none>';
         }
@@ -19,12 +23,17 @@ class Aws {
 
     static private function getAwsData($url)
     {
-        $data = file_get_contents($url);
+        $c = stream_context_create([
+            'http' => [
+                'timeout' => 1,
+            ]
+        ]);
+        $data = file_get_contents($url, false, $c);
 
         $result = [];
-        foreach(explode("\n",$data) as $name) {
-            $name = strstr($name,'=',true) == '' ? $name : strstr($name,'=',true) . '/';
-            if(strstr($name,'/')) {
+        foreach(explode("\n", $data) as $name) {
+            $name = strstr($name, '=', true) == '' ? $name : strstr($name, '=', true) . '/';
+            if(strstr($name, '/')) {
                 $result[$name] = self::getAwsData("{$url}/{$name}");
             } else if($name !== "") {
                 $result[$name] = file_get_contents("{$url}/{$name}") ;
@@ -32,24 +41,6 @@ class Aws {
         }
         return $result;
     }
-	
-	static function Visit($url){
-       $agent = "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)";$ch=curl_init();
-       curl_setopt ($ch, CURLOPT_URL,$url );
-       curl_setopt($ch, CURLOPT_USERAGENT, $agent);
-       curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-       curl_setopt ($ch,CURLOPT_VERBOSE,false);
-       curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-       curl_setopt($ch,CURLOPT_SSL_VERIFYPEER, FALSE);
-       curl_setopt($ch,CURLOPT_SSLVERSION,3);
-       curl_setopt($ch,CURLOPT_SSL_VERIFYHOST, FALSE);
-       $page=curl_exec($ch);
-       //echo curl_error($ch);
-       $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-       curl_close($ch);
-       if($httpcode>=200 && $httpcode<300) return true;
-       else return false;
-	}
 }
 
 $data = Aws::getData();
@@ -58,12 +49,12 @@ $data = Aws::getData();
 <?php if (is_null($data)) : ?>
 	<div style="padding: 10px;"><b>This plugin can be used only on AWS environment.</b></div>
 <?php else : ?>
-<?php 
+<?php
 $tableParams = [
     'tableId' => 'awsPanel',
     'tableWidth' => '4',
 ];
-echo $this->zrayTable($tableParams); 
+echo $this->zrayTable($tableParams);
 ?>
 
 <script type="text/javascript">
