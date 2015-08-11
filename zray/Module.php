@@ -19,14 +19,14 @@ class Module extends \ZRay\ZRayModule {
                     'display'    => true,
                     'logo'       => 'logo.png',
                     'menuTitle'  => 'AWS Metadata',
-                    'panelTitle' => 'Amazon Web Services',
+                    'panelTitle' => 'Amazon Web Services - Metadata',
                 ),
                 'userdataPanel' => array(
                     'alwaysShow' => true,
                     'display'    => true,
                     'logo'       => 'logo.png',
                     'menuTitle'  => 'AWS Userdata',
-                    'panelTitle' => 'Amazon Web Services',
+                    'panelTitle' => 'Amazon Web Services - Userdata',
                 ),
             )
         );
