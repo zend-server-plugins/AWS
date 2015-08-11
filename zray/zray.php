@@ -1,7 +1,7 @@
 <?php
 namespace AwsZray;
 
-$zre = new \ZRayExtension('AwsZray',true);
+$zre = new \ZRayExtension('AWS',true);
 
 // set the logo for default panels
 $zre->setMetadata(array(
