@@ -7,18 +7,25 @@ class Module extends \ZRay\ZRayModule {
         return array(
             // The name defined in ZRayExtension
             'extension' => array(
-                'name' => 'AwsZray',
+                'name' => 'AWS',
             ),
             // Prevent those default panels from being displayed
             'defaultPanels' => array(
             ),
             // configure all custom panels
             'panels' => array(
-                'awsPanel' => array(
+                'metadataPanel' => array(
                     'alwaysShow' => true,
                     'display'    => true,
                     'logo'       => 'logo.png',
-                    'menuTitle'  => 'AWS',
+                    'menuTitle'  => 'AWS Metadata',
+                    'panelTitle' => 'Amazon Web Services',
+                ),
+                'userdataPanel' => array(
+                    'alwaysShow' => true,
+                    'display'    => true,
+                    'logo'       => 'logo.png',
+                    'menuTitle'  => 'AWS Userdata',
                     'panelTitle' => 'Amazon Web Services',
                 ),
             )

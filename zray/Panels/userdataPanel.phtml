@@ -1,0 +1,18 @@
+<?php
+class AwsUserdata {
+    static public function getData() {
+        $userData = @file_get_contents("http://169.254.169.254/latest/user-data");
+        if($userData === false) {
+            $userData = '<none>';
+        }
+        return $userData;
+    }
+}
+
+$data = AwsUserdata::getData();
+?>
+
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<pre class="prettyprint" style="margin-left:10px;margin-right:10px;"><?=htmlspecialchars($data)?></pre>
+
+</script>
