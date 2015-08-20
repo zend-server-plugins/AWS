@@ -1,11 +1,42 @@
 <?php
 class AwsUserdata {
     static public function getData() {
-        $userData = @file_get_contents("http://169.254.169.254/latest/user-data");
+        $url = "http://169.254.169.254/latest/user-data";
+    	if (self::checkStatus($url)) {
+        	$userData = @file_get_contents($url);
+    	} else {
+    		$userData = false;
+    	}
+    	
         if($userData === false) {
             $userData = '<none>';
         }
         return $userData;
+    }
+    
+	 static private function checkStatus($url) {
+    	$ch = curl_init();
+    	curl_setopt($ch, CURLOPT_URL, $url);
+    	curl_setopt($ch, CURLOPT_NOBODY, true);
+    	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+    	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    	curl_setopt($ch, CURLOPT_VERBOSE, false);
+    	curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+    	curl_exec($ch);
+    	 
+    	if (curl_exec($ch) === false) {
+    		return false;
+    	}
+    
+    	$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    
+    	curl_close($ch);
+    
+    	if ($httpcode >= 200 && $httpcode < 300) {
+    		return true;
+    	}
+    	 
+    	return false;
     }
 }
 
