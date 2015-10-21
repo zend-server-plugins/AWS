@@ -1,7 +1,7 @@
 {
   "name" : "aws",
   "display_name" : "AWS",
-  "version" : "1.0.2",
+  "version" : "1.2.1",
   "type": ["zray"],
   "logo": "logo.png",
   "eula": "LICENSE.txt",
